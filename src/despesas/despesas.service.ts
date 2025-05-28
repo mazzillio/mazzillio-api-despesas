@@ -1,9 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateDespesaDto } from './dto/create-despesa.dto';
 import { UpdateDespesaDto } from './dto/update-despesa.dto';
 import { PrismaService } from 'src/prisma/prisma-service.service';
 import { Despesa } from 'generated/prisma';
 import { ListDespesasDto } from './dto/list-depesas.dto';
+import { generateDateFilter } from './utils/generatedate-filter';
 
 @Injectable()
 export class DespesasService {
@@ -24,16 +25,9 @@ export class DespesasService {
       Object.assign(filters, { title: { contains: title } });
     }
 
-    if (year) {
-      const startDate = new Date(year, 0, 1); // Primeiro dia do ano
-      const endDate = new Date(year + 1, 0, 1); // Primeiro dia do próximo ano
-
-      Object.assign(filters, {
-        date: {
-          gte: startDate,
-          lt: endDate,
-        },
-      });
+    const dateFilter = generateDateFilter({ year, month });
+    if (dateFilter) {
+      Object.assign(filters, dateFilter);
     }
 
     if (categoria) {
@@ -45,12 +39,18 @@ export class DespesasService {
     });
   }
 
-  findOne(id: string) {
-    return this.prisma.despesa.findUnique({
+  async findOne(id: string) {
+    const despesa = await this.prisma.despesa.findUnique({
       where: {
         id,
       },
     });
+
+    if (!despesa) {
+      throw new NotFoundException('Despesa não encontrada');
+    }
+
+    return despesa;
   }
 
   update(id: string, updateDespesaDto: UpdateDespesaDto) {
