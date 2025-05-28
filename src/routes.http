@@ -2,24 +2,24 @@ POST http://localhost:3000/despesas
 Content-Type: application/json
 
 {
-  "title": "Despesa 10",
+  "title": "um titulo",
   "amount": 12,
   "categoria": "ALIMENTACAO",
-  "date": "2026-01-27T00:00:00.000Z"
+  "date": "2026-01-27T00:00:00"
 }
 
 ###
 GET http://localhost:3000/despesas/69f0ef80-08e3-4719-aefd-367a28685f49
 
 ###
-GET http://localhost:3000/despesas?year=2025&month=4
+GET http://localhost:3000/despesas
 
 ###
-PATCH http://localhost:3000/despesas/69f0ef80-08e3-4kjnkj
+PATCH http://localhost:3000/despesas/13ced153-4ddb-4271-a337-548c24e11fee
 Content-Type: application/json
 
 {
-  "title": "Despesa 1 atualizada"
+  "title": "Despesa 2"
 }
 
 ###

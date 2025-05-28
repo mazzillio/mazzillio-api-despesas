@@ -5,8 +5,9 @@ import {
   IsNumber,
   IsString,
 } from 'class-validator';
-import { Categoria, Despesa } from '@prisma/client';
+import { Categoria } from '@prisma/client';
 import { ApiProperty } from '@nestjs/swagger';
+import { Transform } from 'class-transformer';
 
 export class CreateDespesaDto {
   @IsNotEmpty({ message: 'O título é obrigatório' })
@@ -35,11 +36,10 @@ export class CreateDespesaDto {
 
   @IsNotEmpty({ message: 'A data é obrigatória' })
   @IsDate()
+  @Transform(({ value }) => new Date(value))
+  @ApiProperty({
+    description: 'A data da despesa',
+    example: '2024-03-20',
+  })
   date: Date;
-  constructor(data: Despesa) {
-    this.title = data.title;
-    this.amount = data.amount;
-    this.categoria = data.categoria;
-    this.date = data.date;
-  }
 }

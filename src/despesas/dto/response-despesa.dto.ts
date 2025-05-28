@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Categoria, Despesa } from '@prisma/client';
-
+import { randomUUID } from 'node:crypto';
+const uuid = randomUUID();
 export class ResponseDespesaDto {
   constructor(data: Despesa) {
     this.id = data.id;
@@ -11,7 +12,7 @@ export class ResponseDespesaDto {
   }
   @ApiProperty({
     description: 'O id da despesa',
-    example: '1',
+    example: uuid,
   })
   id: string;
 

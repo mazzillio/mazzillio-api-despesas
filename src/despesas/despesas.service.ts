@@ -13,20 +13,22 @@ import { generateDateFilter } from './utils/generate-date-filter';
 @Injectable()
 export class DespesasService {
   constructor(private readonly prisma: PrismaService) {}
+
   async create(createDespesaDto: CreateDespesaDto): Promise<Despesa> {
+    const { title, date } = createDespesaDto;
     const existsDespesa = await this.prisma.despesa.findFirst({
       where: {
-        title: createDespesaDto.title,
-        date: new Date(createDespesaDto.date),
+        title: title,
+        date: new Date(date),
       },
     });
-
-    if (existsDespesa) {
-      throw new BadRequestException('Despesa já existe');
-    }
+    if (existsDespesa) throw new BadRequestException('Despesa já existe');
 
     const despesa = await this.prisma.despesa.create({
-      data: createDespesaDto,
+      data: {
+        ...createDespesaDto,
+        date: new Date(date),
+      },
     });
 
     return despesa as Despesa;

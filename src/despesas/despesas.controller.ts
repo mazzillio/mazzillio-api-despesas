@@ -15,7 +15,13 @@ import { CreateDespesaDto } from './dto/create-despesa.dto';
 import { UpdateDespesaDto } from './dto/update-despesa.dto';
 import { ListDespesasDto } from './dto/list-depesas.dto';
 import { ResponseDespesaDto } from './dto/response-despesa.dto';
-import { ApiCreatedResponse, ApiResponse } from '@nestjs/swagger';
+import {
+  ApiCreateDespesa,
+  ApiUpdateDespesa,
+  ApiGetDespesa,
+  ApiListDespesas,
+  ApiDeleteDespesa,
+} from './decorators/swagger.decorator';
 
 @Controller('despesas')
 export class DespesasController {
@@ -23,38 +29,39 @@ export class DespesasController {
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
-  @ApiCreatedResponse({
-    description: 'Despesa criada com sucesso',
-    type: ResponseDespesaDto,
-  })
-  @ApiResponse({
-    status: 404,
-    description: 'Despesa não encontrada',
-  })
+  @ApiCreateDespesa()
   async create(@Body() createDespesaDto: CreateDespesaDto) {
     const despesa = await this.despesasService.create(createDespesaDto);
     return new ResponseDespesaDto(despesa);
   }
 
   @Get()
+  @ApiListDespesas()
   async findAll(@Query() listDespesasDto: ListDespesasDto) {
     const despesas = await this.despesasService.findAll(listDespesasDto);
     return despesas.map((despesa) => new ResponseDespesaDto(despesa));
   }
 
   @Get(':id')
+  @ApiGetDespesa()
   async findOne(@Param('id') id: string) {
     const despesa = await this.despesasService.findOne(id);
     return new ResponseDespesaDto(despesa);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateDespesaDto: UpdateDespesaDto) {
-    return this.despesasService.update(id, updateDespesaDto);
+  @ApiUpdateDespesa()
+  async update(
+    @Param('id') id: string,
+    @Body() updateDespesaDto: UpdateDespesaDto,
+  ) {
+    const despesa = await this.despesasService.update(id, updateDespesaDto);
+    return new ResponseDespesaDto(despesa);
   }
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiDeleteDespesa()
   async remove(@Param('id') id: string) {
     await this.despesasService.remove(id);
   }
