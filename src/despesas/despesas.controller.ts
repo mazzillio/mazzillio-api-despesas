@@ -6,10 +6,12 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { DespesasService } from './despesas.service';
 import { CreateDespesaDto } from './dto/create-despesa.dto';
 import { UpdateDespesaDto } from './dto/update-despesa.dto';
+import { ListDespesasDto } from './dto/list-depesas.dto';
 
 @Controller('despesas')
 export class DespesasController {
@@ -21,22 +23,22 @@ export class DespesasController {
   }
 
   @Get()
-  findAll() {
-    return this.despesasService.findAll();
+  findAll(@Query() listDespesasDto: ListDespesasDto) {
+    return this.despesasService.findAll(listDespesasDto);
   }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.despesasService.findOne(+id);
+    return this.despesasService.findOne(id);
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateDespesaDto: UpdateDespesaDto) {
-    return this.despesasService.update(+id, updateDespesaDto);
+    return this.despesasService.update(id, updateDespesaDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.despesasService.remove(+id);
+    return this.despesasService.remove(id);
   }
 }

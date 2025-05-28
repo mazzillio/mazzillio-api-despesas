@@ -5,22 +5,22 @@ import {
   IsNumber,
   IsString,
 } from 'class-validator';
-import { Categoria } from 'generated/prisma';
+import { Categoria } from '@prisma/client';
 
 export class CreateDespesaDto {
-  @IsNotEmpty()
+  @IsNotEmpty({ message: 'O título é obrigatório' })
   @IsString()
   title: string;
 
-  @IsNotEmpty()
+  @IsNotEmpty({ message: 'O valor é obrigatório' })
   @IsNumber()
   amount: number;
 
-  @IsNotEmpty()
+  @IsNotEmpty({ message: 'A categoria é obrigatória' })
   @IsEnum(Categoria)
   categoria: Categoria;
 
-  @IsNotEmpty()
+  @IsNotEmpty({ message: 'A data é obrigatória' })
   @IsDate()
   date: Date;
 }

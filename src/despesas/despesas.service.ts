@@ -3,6 +3,7 @@ import { CreateDespesaDto } from './dto/create-despesa.dto';
 import { UpdateDespesaDto } from './dto/update-despesa.dto';
 import { PrismaService } from 'src/prisma/prisma-service.service';
 import { Despesa } from 'generated/prisma';
+import { ListDespesasDto } from './dto/list-depesas.dto';
 
 @Injectable()
 export class DespesasService {
@@ -15,19 +16,57 @@ export class DespesasService {
     return despesa as Despesa;
   }
 
-  findAll() {
-    return `This action returns all despesas`;
+  findAll(listDespesasDto: ListDespesasDto) {
+    const { title, month, year, categoria } = listDespesasDto;
+    const filters = {};
+
+    if (title) {
+      Object.assign(filters, { title: { contains: title } });
+    }
+
+    if (year) {
+      const startDate = new Date(year, 0, 1); // Primeiro dia do ano
+      const endDate = new Date(year + 1, 0, 1); // Primeiro dia do próximo ano
+
+      Object.assign(filters, {
+        date: {
+          gte: startDate,
+          lt: endDate,
+        },
+      });
+    }
+
+    if (categoria) {
+      Object.assign(filters, { categoria });
+    }
+
+    return this.prisma.despesa.findMany({
+      where: filters,
+    });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} despesa`;
+  findOne(id: string) {
+    return this.prisma.despesa.findUnique({
+      where: {
+        id,
+      },
+    });
   }
 
-  update(id: number, updateDespesaDto: UpdateDespesaDto) {
-    return `This action updates a #${id} despesa`;
+  update(id: string, updateDespesaDto: UpdateDespesaDto) {
+    return this.prisma.despesa.update({
+      where: {
+        id,
+      },
+      data: updateDespesaDto,
+    });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} despesa`;
+  remove(id: string) {
+    return this.prisma.despesa.delete({
+      where: {
+        id,
+      },
+    });
   }
 }
