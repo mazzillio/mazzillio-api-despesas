@@ -68,3 +68,6 @@ http://localhost:3000/doc
 
 - Adicionei validação para não cadastrar uma despesa com mesmo título e data
 - Estratégia de cache usada baseado na formação de Nestjs da alura
+
+## Sugestão de Melhoria
+- Adicionar uma estratégia de logger
