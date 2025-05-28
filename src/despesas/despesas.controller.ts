@@ -41,7 +41,6 @@ export class DespesasController {
   @ApiListDespesas()
   @UseInterceptors(CacheInterceptor)
   async findAll(@Query() listDespesasDto: ListDespesasDto) {
-    console.log('findAll');
     const despesas = await this.despesasService.findAll(listDespesasDto);
     return despesas.map((despesa) => new ResponseDespesaDto(despesa));
   }
