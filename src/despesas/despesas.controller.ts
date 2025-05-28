@@ -15,7 +15,7 @@ import { CreateDespesaDto } from './dto/create-despesa.dto';
 import { UpdateDespesaDto } from './dto/update-despesa.dto';
 import { ListDespesasDto } from './dto/list-depesas.dto';
 import { ResponseDespesaDto } from './dto/response-despesa.dto';
-import { ApiCreatedResponse, ApiResponse, ApiQuery } from '@nestjs/swagger';
+import { ApiCreatedResponse, ApiResponse } from '@nestjs/swagger';
 
 @Controller('despesas')
 export class DespesasController {

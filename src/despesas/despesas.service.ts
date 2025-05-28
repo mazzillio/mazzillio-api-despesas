@@ -33,20 +33,12 @@ export class DespesasService {
   }
 
   findAll(listDespesasDto: ListDespesasDto) {
-    const { title, month, year, categoria } = listDespesasDto;
+    const { month, year } = listDespesasDto;
     const filters = {};
-
-    if (title) {
-      Object.assign(filters, { title: { contains: title } });
-    }
 
     const dateFilter = generateDateFilter({ year, month });
     if (dateFilter) {
       Object.assign(filters, dateFilter);
-    }
-
-    if (categoria) {
-      Object.assign(filters, { categoria });
     }
 
     return this.prisma.despesa.findMany({
