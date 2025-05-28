@@ -2,7 +2,7 @@ POST http://localhost:3000/despesas
 Content-Type: application/json
 
 {
-  "title": "um titulo",
+  "title": "mais titulo 7324",
   "amount": 12,
   "categoria": "ALIMENTACAO",
   "date": "2026-01-27T00:00:00"
