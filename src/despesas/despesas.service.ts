@@ -1,15 +1,30 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateDespesaDto } from './dto/create-despesa.dto';
 import { UpdateDespesaDto } from './dto/update-despesa.dto';
 import { PrismaService } from 'src/prisma/prisma-service.service';
 import { Despesa } from 'generated/prisma';
 import { ListDespesasDto } from './dto/list-depesas.dto';
-import { generateDateFilter } from './utils/generatedate-filter';
+import { generateDateFilter } from './utils/generate-date-filter';
 
 @Injectable()
 export class DespesasService {
   constructor(private readonly prisma: PrismaService) {}
   async create(createDespesaDto: CreateDespesaDto): Promise<Despesa> {
+    const existsDespesa = await this.prisma.despesa.findFirst({
+      where: {
+        title: createDespesaDto.title,
+        date: new Date(createDespesaDto.date),
+      },
+    });
+
+    if (existsDespesa) {
+      throw new BadRequestException('Despesa já existe');
+    }
+
     const despesa = await this.prisma.despesa.create({
       data: createDespesaDto,
     });
@@ -53,7 +68,17 @@ export class DespesasService {
     return despesa;
   }
 
-  update(id: string, updateDespesaDto: UpdateDespesaDto) {
+  async update(id: string, updateDespesaDto: UpdateDespesaDto) {
+    const despesa = await this.prisma.despesa.findUnique({
+      where: {
+        id,
+      },
+    });
+
+    if (!despesa) {
+      throw new NotFoundException('Despesa não encontrada');
+    }
+
     return this.prisma.despesa.update({
       where: {
         id,
@@ -62,7 +87,17 @@ export class DespesasService {
     });
   }
 
-  remove(id: string) {
+  async remove(id: string) {
+    const despesa = await this.prisma.despesa.findUnique({
+      where: {
+        id,
+      },
+    });
+
+    if (!despesa) {
+      throw new NotFoundException('Despesa não encontrada');
+    }
+
     return this.prisma.despesa.delete({
       where: {
         id,

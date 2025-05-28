@@ -2,8 +2,8 @@ POST http://localhost:3000/despesas
 Content-Type: application/json
 
 {
-  "title": "Despesa 8",
-  "amount": 100,
+  "title": "Despesa 10",
+  "amount": 12,
   "categoria": "ALIMENTACAO",
   "date": "2026-01-27T00:00:00.000Z"
 }
@@ -15,7 +15,7 @@ GET http://localhost:3000/despesas/69f0ef80-08e3-4719-aefd-367a28685f49
 GET http://localhost:3000/despesas?year=2025&month=4
 
 ###
-PATCH http://localhost:3000/despesas/69f0ef80-08e3-4719-aefd-367a28685f49
+PATCH http://localhost:3000/despesas/69f0ef80-08e3-4kjnkj
 Content-Type: application/json
 
 {
@@ -23,4 +23,4 @@ Content-Type: application/json
 }
 
 ###
-DELETE http://localhost:3000/despesas/5889fbb2-83bd-4c6c-9caf-38951e0430d0
+DELETE http://localhost:3000/despesas/2a709ca0-c82f-419f-8f33-1744bb981e0a

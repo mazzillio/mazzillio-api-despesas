@@ -5,7 +5,7 @@ import {
   IsNumber,
   IsString,
 } from 'class-validator';
-import { Categoria } from '@prisma/client';
+import { Categoria, Despesa } from '@prisma/client';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateDespesaDto {
@@ -36,4 +36,10 @@ export class CreateDespesaDto {
   @IsNotEmpty({ message: 'A data é obrigatória' })
   @IsDate()
   date: Date;
+  constructor(data: Despesa) {
+    this.title = data.title;
+    this.amount = data.amount;
+    this.categoria = data.categoria;
+    this.date = data.date;
+  }
 }
